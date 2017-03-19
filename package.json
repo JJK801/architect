@@ -1,0 +1,48 @@
+{
+  "name": "architect",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib/",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "nyc ava test/unit/**/ test/unit/ test/functional/**/ test/functional/",
+    "jsdoc": "npm-run-all --parallel jsdoc:*",
+    "jsdoc:html": "jsdoc -r -d doc/html lib",
+    "lint": "npm-run-all lint:fix lint:verify",
+    "lint:verify": "eslint lib test",
+    "lint:fix": "eslint --fix lib test"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "ava": "^0.18.2",
+    "babel-cli": "^6.18.0",
+    "babel-core": "^6.18.2",
+    "babel-plugin-lodash": "^3.2.11",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-polyfill": "^6.16.0",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-runtime": "^6.23.0",
+    "chai": "^3.5.0",
+    "console.mute": "^0.3.0",
+    "eslint": "^3.11.1",
+    "eslint-plugin-import": "^2.2.0",
+    "istanbul": "^1.1.0-alpha.1",
+    "jsdoc": "^3.4.3",
+    "npm-run-all": "^4.0.2",
+    "nyc": "^10.1.2",
+    "rewire": "^2.5.2",
+    "sinon": "^1.17.6"
+  },
+  "dependencies": {
+    "joi": "^10.2.2",
+    "lodash": "^4.17.4"
+  },
+  "ava": {
+    "require": [
+      "babel-core/register"
+    ]
+  }
+}
