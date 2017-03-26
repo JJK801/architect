@@ -1,10 +1,13 @@
 /* eslint-disable no-console, require-jsdoc, valid-jsdoc */
 
-console.log("#################################");
-console.log("#### Functional Example: User ###");
-console.log("#################################");
+import { Model } from '../lib';
+import Log from 'log';
 
-import {Model} from '../lib';
+const log = new Log('notice');
+
+log.notice("#################################");
+log.notice("#### Functional Example: User ###");
+log.notice("#################################");
 
 export class User extends Model {
 	get fullname () {
@@ -39,20 +42,20 @@ export const userDefinition = {
 
 export const userNew = new User(userDefinition);
 
-console.log("New user username is:", userNew.username);
-console.log("New user fullname is:", userNew.fullname);
-console.log("New user age is:", userNew.age);
-console.log("Is new user new ?", User.is(userNew, User.STATE.NEW));
-console.log("Is new user modified ?", User.is(userNew, User.STATE.MODIFIED));
-console.log("Is new user deleted ?", User.is(userNew, User.STATE.DELETED));
+log.notice("New user username is:", userNew.username);
+log.notice("New user fullname is:", userNew.fullname);
+log.notice("New user age is:", userNew.age);
+log.notice("Is new user new ?", User.is(userNew, User.STATE.NEW));
+log.notice("Is new user modified ?", User.is(userNew, User.STATE.MODIFIED));
+log.notice("Is new user deleted ?", User.is(userNew, User.STATE.DELETED));
 
 /* Load an existing user */
 
 export const userLoaded = User.load(userDefinition);
 
-console.log("Loaded user username is:", userLoaded.username);
-console.log("Loaded user fullname is:", userLoaded.fullname);
-console.log("Loaded user age is:", userLoaded.age);
-console.log("Is loaded user new ?", User.is(userLoaded, User.STATE.NEW));
-console.log("Is loaded user modified ?", User.is(userLoaded, User.STATE.MODIFIED));
-console.log("Is loaded user deleted ?", User.is(userLoaded, User.STATE.DELETED));
+log.notice("Loaded user username is:", userLoaded.username);
+log.notice("Loaded user fullname is:", userLoaded.fullname);
+log.notice("Loaded user age is:", userLoaded.age);
+log.notice("Is loaded user new ?", User.is(userLoaded, User.STATE.NEW));
+log.notice("Is loaded user modified ?", User.is(userLoaded, User.STATE.MODIFIED));
+log.notice("Is loaded user deleted ?", User.is(userLoaded, User.STATE.DELETED));

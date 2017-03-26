@@ -1,10 +1,10 @@
 {
   "reporter": [
-    "lcovonly",
-    "text"
+    "lcovonly"
   ],
   "exclude": [
     "lib/schema/adapter/index.js",
+    "lib/index.js",
     "test/"
   ]
 }

@@ -2,8 +2,17 @@
 
 import test from 'ava';
 import { expect } from 'chai';
+import sinon from 'sinon';
 
-import * as results from '../../examples/cat';
+import Log from 'log';
+
+const logs = [];
+
+sinon.stub(Log.prototype, 'log', () => logs.push(arguments));
+
+const results = require('../../examples/cat');
+
+Log.prototype.log.restore();
 
 test("Should select the good cat", () => {
 	expect(results.myNewCat).to.equal(results.cats[2]);

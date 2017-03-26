@@ -8,12 +8,14 @@ class Profile extends Model
 
 }
 
-Profile.register(() => new Schema({
+Profile
+.register(() => new Schema({
 	id:     {
 		_type:    "number",
 		required: true
 	},
 	person: Model.get("Person")
-}));
+}))
+.setRelation('person', 'profiles');
 
 export default Profile;

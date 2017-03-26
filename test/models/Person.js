@@ -1,5 +1,10 @@
 /* eslint-disable require-jsdoc, valid-jsdoc */
 
+import Chance from 'chance';
+import { map } from 'lodash';
+
+const chance = new Chance();
+
 import Schema from '../../lib/schema';
 import Model from '../../lib/model';
 
@@ -10,14 +15,15 @@ class Person extends Model
 	}
 }
 
-Person.register(() => new Schema({
+Person
+.register(() => new Schema({
 	id: {
 		_type:    "number",
 		required: true
 	},
 	firstname: "string",
 	lastname:  "string",
-	birth:     "date",
+	birthday:  "date",
 	addresses: {
 		_type:   "array",
 		items:   [Model.get("Address")],
@@ -29,7 +35,24 @@ Person.register(() => new Schema({
 		items:   [Model.get("Profile")],
 		default: []
 		//unique: 'id'
-	}
-}));
+	},
+	user: Model.get("User")
+}))
+.setRelation('addresses')
+.setRelation('profiles', 'person')
+.setRelation('user', 'person');
 
 export default Person;
+
+export function generate (nb) {
+	if (nb) {
+		return map(Array(nb), () => generate());
+	}
+
+	return {
+		id: chance.integer({min: 0}),
+		firstname: chance.first(),
+		lastname: chance.last(),
+		birthday: chance.birthday({string: true})
+	};
+}

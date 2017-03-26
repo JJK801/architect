@@ -1,10 +1,13 @@
 /* eslint-disable no-console, require-jsdoc, valid-jsdoc */
 
-console.log("#################################");
-console.log("#### Functional Example: Cat ####");
-console.log("#################################");
+import { Schema } from '../lib';
+import Log from 'log';
 
-import {Schema} from '../lib';
+const log = new Log('notice');
+
+log.notice("#################################");
+log.notice("#### Functional Example: Cat ####");
+log.notice("#################################");
 
 // Let's choose a cat to the pet shop with our architect
 
@@ -53,7 +56,7 @@ export const cats = [
 
 export const myNewCat = cats.find((cat) => catValidator.validate(cat) === true);
 
-console.log("My new cat is:", myNewCat);
+log.notice("My new cat is:", myNewCat);
 /*
 {
 	name:  "snowball",
@@ -70,7 +73,7 @@ export const snowball = catValidator.proxify(myNewCat);
 try {
 	snowball.colors = ["yellow"];
 } catch (e) {
-	console.error("Can't paint snowball in yellow"); // Throws an error, as i specified that i only want white, black or red cat.
+	log.error("Can't paint snowball in yellow"); // Throws an error, as i specified that i only want white, black or red cat.
 }
 
 
@@ -78,7 +81,7 @@ try {
 
 snowball.colors = ["red"];
 
-console.log("snowball's color is now:", snowball.colors); // => ['red']
+log.notice("snowball's color is now:", snowball.colors); // => ['red']
 
 // oh yeah, a cat from hell !
 // let's try making it's paws blue !
@@ -86,7 +89,7 @@ console.log("snowball's color is now:", snowball.colors); // => ['red']
 try {
 	snowball.colors.push("blue"); // Yeah, we also validate incoming data
 } catch (e) {
-	console.error("Can't paint snowball's paws in blue"); // Throws an error, as i specified that i only want white, black or red cat.
+	log.error("Can't paint snowball's paws in blue"); // Throws an error, as i specified that i only want white, black or red cat.
 }
 
 // you can now even try by cutting/grafting paws :D
@@ -104,12 +107,12 @@ try {
 
 // calm down ! every incoming value is type-casted (as far as the validation library can), even for dates, etc...
 
-console.log("Snowball's age is:", snowball.age); // => 2
-console.log("Snowball's age is of type:", typeof snowball.age); // => number
+log.notice("Snowball's age is:", snowball.age); // => 2
+log.notice("Snowball's age is of type:", typeof snowball.age); // => number
 
 export class Cat {}
 
 export const shrodinger = catValidator.proxify(new Cat());
 
-console.log("Shrodinger constructor is:", shrodinger.constructor.name); // => Cat
-console.log("is Shrodinger instance of cat ?", shrodinger instanceof Cat); // => true
+log.notice("Shrodinger constructor is:", shrodinger.constructor.name); // => Cat
+log.notice("is Shrodinger instance of cat ?", shrodinger instanceof Cat); // => true

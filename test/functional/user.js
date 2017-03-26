@@ -2,8 +2,17 @@
 
 import test from 'ava';
 import { expect } from 'chai';
+import sinon from 'sinon';
 
-import {User, userNew, userLoaded, userDefinition} from '../../examples/user';
+import Log from 'log';
+
+const logs = [];
+
+sinon.stub(Log.prototype, 'log', () => logs.push(arguments));
+
+const {User, userNew, userLoaded, userDefinition} = require('../../examples/user');
+
+Log.prototype.log.restore();
 
 test("Should have valid user", () => {
 	expect(userNew).to.be.instanceOf(User);
