@@ -14,10 +14,10 @@ RelationManager.getRelations(Profile)
 MetadataManager
 	.register(Profile, () => new Schema({
 		id:     {
-			_type:    "number",
+			_type:    'number',
 			required: true
 		},
-		person: Model.get("Person")
+		person: Model.get('Person')
 	}));
 
 export default Profile;

@@ -11,7 +11,7 @@ import NumberSchemaType from '../../../../lib/schema/type/number';
 import AlternativesSchemaType from '../../../../lib/schema/type/alternatives';
 import StringSchemaType from '../../../../lib/schema/type/string';
 
-test("Should contain references to basic types", () => {
+test('Should contain references to basic types', () => {
 	expect(SchemaTypeManager.Types.any).to.equal(SchemaType);
 	expect(SchemaTypeManager.Types.array).to.equal(ArraySchemaType);
 	expect(SchemaTypeManager.Types.boolean).to.equal(BooleanSchemaType);

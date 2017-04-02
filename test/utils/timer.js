@@ -2,7 +2,7 @@
 
 import { chunk, slice, sortBy, map, filter } from 'lodash';
 
-const _captures = Symbol("captures");
+const _captures = Symbol('captures');
 
 class Timer
 {

@@ -16,14 +16,14 @@ class Address extends Model
 MetadataManager
 	.register(Address, () => new Schema({
 		id:        {
-			_type:    "number",
+			_type:    'number',
 			required: true
 		},
-		number:  "string",
-		street:  "string",
-		city:    "string",
-		zipcode: "string",
-		country: "string"
+		number:  'string',
+		street:  'string',
+		city:    'string',
+		zipcode: 'string',
+		country: 'string'
 	}));
 
 

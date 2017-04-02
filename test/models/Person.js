@@ -23,25 +23,25 @@ RelationManager.getRelations(Person)
 MetadataManager
 	.register(Person, () => new Schema({
 		id: {
-			_type:    "number",
+			_type:    'number',
 			required: true
 		},
-		firstname: "string",
-		lastname:  "string",
-		birthday:  "date",
+		firstname: 'string',
+		lastname:  'string',
+		birthday:  'date',
 		addresses: {
-			_type:   "array",
-			items:   [Model.get("Address")],
+			_type:   'array',
+			items:   [Model.get('Address')],
 			default: []
 			//unique: 'id'
 		},
 		profiles: {
-			_type:   "array",
-			items:   [Model.get("Profile")],
+			_type:   'array',
+			items:   [Model.get('Profile')],
 			default: []
 			//unique: 'id'
 		},
-		user: Model.get("User")
+		user: Model.get('User')
 	}));
 
 export default Person;

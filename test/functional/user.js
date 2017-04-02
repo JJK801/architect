@@ -16,7 +16,7 @@ const {User, userNew, userLoaded, userDefinition} = require('../../examples/user
 
 Log.prototype.log.restore();
 
-test("Should have valid user", () => {
+test('Should have valid user', () => {
 	expect(userNew).to.be.instanceOf(User);
 	expect(userNew.username).to.equal(userDefinition.username);
 	expect(userNew.firstname).to.equal(userDefinition.firstname);
@@ -30,20 +30,20 @@ test("Should have valid user", () => {
 	expect(userLoaded.birth).to.eql(new Date(userDefinition.birth));
 });
 
-test("Should expose virtual properties", () => {
-	expect(userNew.fullname).to.equal("Jérémy Jourdin");
+test('Should expose virtual properties', () => {
+	expect(userNew.fullname).to.equal('Jérémy Jourdin');
 	expect(userNew.age).to.be.at.least(30);
 
-	expect(userLoaded.fullname).to.equal("Jérémy Jourdin");
+	expect(userLoaded.fullname).to.equal('Jérémy Jourdin');
 	expect(userLoaded.age).to.be.at.least(30);
 });
 
-test("Should have the right state", () => {
-	expect(StateManager.getState(userNew).is("NEW")).to.be.true;
-	expect(StateManager.getState(userNew).is("MODIFIED")).to.be.false;
-	expect(StateManager.getState(userNew).is("DELETED")).to.be.false;
+test('Should have the right state', () => {
+	expect(StateManager.getState(userNew).is('NEW')).to.be.true;
+	expect(StateManager.getState(userNew).is('MODIFIED')).to.be.false;
+	expect(StateManager.getState(userNew).is('DELETED')).to.be.false;
 
-	expect(StateManager.getState(userLoaded).is("NEW")).to.be.false;
-	expect(StateManager.getState(userLoaded).is("MODIFIED")).to.be.false;
-	expect(StateManager.getState(userLoaded).is("DELETED")).to.be.false;
+	expect(StateManager.getState(userLoaded).is('NEW')).to.be.false;
+	expect(StateManager.getState(userLoaded).is('MODIFIED')).to.be.false;
+	expect(StateManager.getState(userLoaded).is('DELETED')).to.be.false;
 });

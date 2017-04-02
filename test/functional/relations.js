@@ -8,7 +8,7 @@ import Address, { generate as generateAddress } from '../models/Address';
 import Person,  { generate as generatePerson }  from '../models/Person';
 import '../models/Profile';
 
-test("Functional test of relations", () => {
+test('Functional test of relations', () => {
 	const userData = generateUser();
 	const personData = generatePerson();
 	const addressesData = generateAddress(5);

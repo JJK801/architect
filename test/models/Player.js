@@ -12,7 +12,7 @@ class Player extends Profile
 
 MetadataManager
 	.register(Player, () => new Schema({
-		number: "number"
+		number: 'number'
 	}));
 
 export default Player;

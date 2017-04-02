@@ -19,11 +19,11 @@ RelationManager.getRelations(User)
 MetadataManager
 	.register(User, () => new Schema({
 		id:     {
-			_type:    "number",
+			_type:    'number',
 			required: true
 		},
-		username: "string",
-		person:   Model.get("Person")
+		username: 'string',
+		person:   Model.get('Person')
 	}));
 
 export default User;

@@ -14,12 +14,12 @@ class ModelWithLazyLoadedSchema extends Model {}
 class ModelNotRegistered extends Model {}
 class ModelWithNamespace extends Model {}
 
-test("Should register valid models", () => {
+test('Should register valid models', () => {
 	expect(MetadataManager.register(Model)).to.be.instanceOf(MetadataManager);
 
 	const schemaData = {
-		foo: "string",
-		bar: "string"
+		foo: 'string',
+		bar: 'string'
 	};
 
 	const schema = new Schema(schemaData);
@@ -36,17 +36,17 @@ test("Should register valid models", () => {
 	expect(keys(MetadataManager.getMetadata(ModelWithSchemaData).schema.paths)).to.eql(keys(schemaData));
 	expect(MetadataManager.getMetadata(ModelWithLazyLoadedSchema).schema).to.equal(schema);
 
-	expect(MetadataManager.getMetadata("ModelNotRegistered")).to.be.undefined;
+	expect(MetadataManager.getMetadata('ModelNotRegistered')).to.be.undefined;
 	expect(MetadataManager.getMetadata(ModelNotRegistered).schema).to.be.an.instanceOf(Schema);
-	expect(MetadataManager.getMetadata("ModelNotRegistered").model).to.equal(ModelNotRegistered);
+	expect(MetadataManager.getMetadata('ModelNotRegistered').model).to.equal(ModelNotRegistered);
 
-	expect(MetadataManager.register(ModelWithNamespace, undefined, "ns")).to.be.an.instanceOf(MetadataManager);
-	expect(MetadataManager.getMetadata("ns/ModelWithNamespace").model).to.equal(ModelWithNamespace);
-	expect(MetadataManager.getMetadata(ModelWithNamespace).namespace).to.equal("ns");
+	expect(MetadataManager.register(ModelWithNamespace, undefined, 'ns')).to.be.an.instanceOf(MetadataManager);
+	expect(MetadataManager.getMetadata('ns/ModelWithNamespace').model).to.equal(ModelWithNamespace);
+	expect(MetadataManager.getMetadata(ModelWithNamespace).namespace).to.equal('ns');
 });
 
-test("Should get valid models", () => {
-	expect(MetadataManager.getMetadata("Model").model).to.equal(Model);
+test('Should get valid models', () => {
+	expect(MetadataManager.getMetadata('Model').model).to.equal(Model);
 	expect(MetadataManager.getMetadata(Model).model).to.equal(Model);
 	expect(MetadataManager.getMetadata(new Model()).model).to.equal(Model);
 	expect(MetadataManager.getMetadata()).to.be.undefined;

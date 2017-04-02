@@ -40,3 +40,8 @@ rules:
       prefer:
         returns: return
         augments: extends
+  quotes:
+    - "error"
+    - "single"
+    -
+      avoidEscape: true
