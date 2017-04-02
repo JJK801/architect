@@ -72,7 +72,7 @@ test("Should bind valid data", () => {
 
 	const returned = schema.proxify(object);
 
-	expect(object).to.be.an.instanceof(Proxy);
+	expect(object).to.be.an.instanceof(Object);
 	expect(object).to.not.equal(returned);
 });
 

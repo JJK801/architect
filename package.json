@@ -9,6 +9,7 @@
   "scripts": {
     "test": "nyc ava test/unit/**/ test/unit/ test/functional/**/ test/functional/",
     "test:coverage": "nyc report --reporter=text",
+    "test:coveralls": "nyc report --reporter=text-lcov | coveralls",
     "jsdoc": "jsdoc -r -d doc/html lib",
     "lint": "eslint lib test",
     "lint:fix": "eslint --fix lib test",
@@ -17,6 +18,9 @@
   },
   "author": "",
   "license": "ISC",
+  "engines": {
+    "node": ">= 6.0.0"
+  },
   "devDependencies": {
     "ava": "^0.18.2",
     "babel-cli": "^6.18.0",
@@ -32,6 +36,7 @@
     "chai-performance": "^0.1.4",
     "chance": "^1.0.6",
     "console.mute": "^0.3.0",
+    "coveralls": "^2.13.0",
     "eslint": "^3.11.1",
     "eslint-plugin-import": "^2.2.0",
     "husky": "^0.13.3",

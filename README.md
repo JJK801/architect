@@ -1,4 +1,6 @@
 # Architect.js
+[![Build Status](https://travis-ci.org/JJK801/architect.svg?branch=master)](https://travis-ci.org/JJK801/architect)
+[![Coverage Status](https://coveralls.io/repos/github/JJK801/architect/badge.svg?branch=master)](https://coveralls.io/github/JJK801/architect?branch=master)
 
 Large projects to build ? Take an architect !
 
