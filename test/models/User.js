@@ -6,23 +6,25 @@ import { map } from 'lodash';
 const chance = new Chance();
 
 import Schema from '../../lib/schema';
-import Model from '../../lib/model';
+import Model, { MetadataManager, RelationManager } from '../../lib/model';
 
 class User extends Model
 {
 
 }
 
-User
-.register(() => new Schema({
-	id:     {
-		_type:    "number",
-		required: true
-	},
-	username: "string",
-	person:   Model.get("Person")
-}))
-.setRelation('person', 'user');
+RelationManager.getRelations(User)
+	.setRelation('person', 'user');
+
+MetadataManager
+	.register(User, () => new Schema({
+		id:     {
+			_type:    "number",
+			required: true
+		},
+		username: "string",
+		person:   Model.get("Person")
+	}));
 
 export default User;
 

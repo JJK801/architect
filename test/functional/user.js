@@ -6,6 +6,8 @@ import sinon from 'sinon';
 
 import Log from 'log';
 
+import StateManager from '../../lib/model/state_manager';
+
 const logs = [];
 
 sinon.stub(Log.prototype, 'log', () => logs.push(arguments));
@@ -37,11 +39,11 @@ test("Should expose virtual properties", () => {
 });
 
 test("Should have the right state", () => {
-	expect(User.is(userNew, User.STATE.NEW)).to.be.true;
-	expect(User.is(userNew, User.STATE.MODIFIED)).to.be.false;
-	expect(User.is(userNew, User.STATE.DELETED)).to.be.false;
+	expect(StateManager.getState(userNew).is("NEW")).to.be.true;
+	expect(StateManager.getState(userNew).is("MODIFIED")).to.be.false;
+	expect(StateManager.getState(userNew).is("DELETED")).to.be.false;
 
-	expect(User.is(userLoaded, User.STATE.NEW)).to.be.false;
-	expect(User.is(userLoaded, User.STATE.MODIFIED)).to.be.false;
-	expect(User.is(userLoaded, User.STATE.DELETED)).to.be.false;
+	expect(StateManager.getState(userLoaded).is("NEW")).to.be.false;
+	expect(StateManager.getState(userLoaded).is("MODIFIED")).to.be.false;
+	expect(StateManager.getState(userLoaded).is("DELETED")).to.be.false;
 });

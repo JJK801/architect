@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: schema/adapter/Joi.js</title>
+    <title>JSDoc: Source: model/interface.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: schema/adapter/Joi.js</h1>
+    <h1 class="page-title">Source: model/interface.js</h1>
 
     
 
@@ -26,98 +26,75 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import Adapter from './index';
-import Joi     from 'joi';
+            <pre class="prettyprint source linenums"><code>import { EventEmitter } from 'events';
+import { assign } from 'lodash';
 
-import SchemaTypeManager from '../type/manager';
+import Schema from '../schema';
 
-import { map, mapValues, toPairs, isArray, each, invoke } from 'lodash';
+const emitter = new EventEmitter();
 
 /**
- * Validation adapter for [Joi]{@link https://github.com/hapijs/joi}
- *
- * @extends {Adapter}
+ * Interface class for Models
  */
-class JoiAdapter extends Adapter
+class ModelInterface
 {
 	/**
-	 * @inheritdoc
+	 * @param {object} [data={}] Initialisation data
 	 */
-	static getValidator (type = null) {
-		const validator = invoke(Joi, type);
+	constructor (data = {}) {
+		emitter.emit('instanciate.before', this);
 
-		return validator;
+		assign(this, data);
+
+		const descriptor = {
+			instance: this,
+			model:    this.constructor
+		};
+		-
+		emitter.emit('instanciate', descriptor);
+
+		return descriptor.instance;
 	}
 
 	/**
-	 * @inheritdoc
+	 * Load existing data
+	 *
+	 * @param {object} [data={}]  Data to load
+	 * @param {Model}  [instance] Instance to refresh
+	 *
+	 * @return {Model} instance with data
 	 */
-	static build (descriptor = {}, validator) {
-		const methodCalls = toPairs(descriptor);
+	static load (data = {}, instance) {
+		emitter.emit('load', instance, data);
 
-		each(methodCalls, (call) => {
-			const args = isArray(call[1]) &amp;&amp; (call[0] !== "default") ? call[1] : [call[1]];
-
-			validator = validator[call[0]].apply(validator, args);
-		});
-
-		return validator;
+		return instance;
 	}
 
 	/**
-	 * @inheritdoc
+	 * The static event emitter
+	 *
+	 * @type {EventEmitter}
 	 */
-	static validate (value, validator) {
-		return validator.validate(value);
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	static set (value, validator) {
-		return Joi.attempt(value, validator);
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	static sanitize (type, descriptor = {}) {
-		switch (type) {
-			case 'alternatives':
-				if (descriptor.try)
-					descriptor.try = map(descriptor.try, (type) => SchemaTypeManager.instanciate(type).validator);
-				break;
-			case 'array':
-				if (descriptor.items)
-					descriptor.items = map(descriptor.items, (type) => SchemaTypeManager.instanciate(type).validator);
-				break;
-			case 'object':
-				if (descriptor.keys)
-					descriptor.keys = mapValues(descriptor.keys, (type) => SchemaTypeManager.instanciate(type).validator);
-
-				if (descriptor._instanceOf) { // @TODO: Manage it a better way
-					descriptor.type = descriptor._instanceOf;
-
-					delete descriptor._instanceOf;
-				}
-				break;
-		}
-
-		return super.sanitize(type, descriptor);
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	static extend (parent, child) {
-		if (parent)
-			return parent.concat(child);
-
-		return child;
+	static get emitter () {
+		return emitter;
 	}
 }
 
-export default JoiAdapter;
+Schema.emitter.on('proxify', (schema, proxy) => {
+	const { proxy: obj } = proxy;
+
+	if (obj instanceof ModelInterface) {
+		ModelInterface.emitter.emit('proxify', proxy);
+	}
+});
+
+Schema.emitter.on('change', (obj, key, value) => {
+	if (obj instanceof ModelInterface) {
+		ModelInterface.emitter.emit('change', obj, key, value);
+	}
+});
+
+export default ModelInterface;
 </code></pre>
         </article>
     </section>

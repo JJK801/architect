@@ -1,7 +1,8 @@
 import {expect} from 'chai';
 import test from 'ava';
 
-import { keys, pick, each } from 'lodash';
+import { keys, pick, each, max, map, chunk } from 'lodash';
+import Timer from '../../utils/timer';
 
 import Schema            from '../../../lib/schema';
 import SchemaTypeManager from '../../../lib/schema/type';
@@ -117,4 +118,32 @@ test("Should throw on invalid data", () => {
 	const object = schema.proxify({ id: 1 });
 
 	each(dataFalse, (v, k) => expect(() => object[k] = v).to.throw(Error));
+});
+
+test("Should execute fast validation", () => {
+	const object = { id: 1, tags: [] };
+	const proxy = schema.proxify({ id: 1, tags: [] });
+	const timer = new Timer();
+
+	timer.capture();
+	object.id = 2;
+	timer.capture();
+	proxy.id = 3;
+	timer.capture();
+	object.name = "test";
+	timer.capture();
+	proxy.name = "test2";
+	timer.capture();
+	object.birth = new Date("2017-01-30");
+	timer.capture();
+	proxy.birth = "2017-01-31";
+	timer.capture();
+	object.tags.push("foo");
+	timer.capture();
+	proxy.tags.push("bar");
+	timer.capture();
+
+	const diffs = map(chunk(timer.times, 2), (times) => times[1] - times[0]);
+
+	expect(max(diffs)).to.be.most(1);
 });

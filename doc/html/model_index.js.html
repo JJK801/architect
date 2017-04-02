@@ -26,232 +26,29 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { isString, isObject, get, compact, find, values, clone, includes, isFunction, assign } from 'lodash';
+            <pre class="prettyprint source linenums"><code>import { assign } from 'lodash';
 
-import Schema from '../schema';
+import ModelInterface  from './interface';
 
-const _models = {};
-const _revoke = Symbol("revoke");
-const _state  = Symbol("state");
-
-const STATE = {
-	"NEW":      1,
-	"MODIFIED": 2,
-	"DELETED":  4
-};
-
-/**
- * Proxify instance with schema
- *
- * @private
- *
- * @return {Model} Proxified instance
- */
-function proxify () {
-	const hooks = {
-		change: (k) => {
-			this[_state].flag |= STATE.MODIFIED;
-
-			if (!includes(this[_state].modified, k))
-				this[_state].modified.push(k);
-		},
-		revoke: (revoke) => this[_revoke] = revoke
-	};
-
-	return this.constructor.schema.proxify(this, hooks);
-}
-
-
-
-/**
- * Get a registered model mapping by it name (with namespace), class, or instance
- *
- * @param {Class|Model|string} name The model identifier
- *
- * @return {object|undefined} The model mapping (name, schema, class, namespace) if exists
- */
-function mapping (name) {
-	let mapping;
-
-	if (name) {
-		if (isString(name))
-			mapping = get(_models, name);
-
-		if (name instanceof Model)
-			mapping = find(values(_models), (def) => name instanceof def.model);
-
-		if (name === Model || name.prototype instanceof Model)
-			mapping = find(values(_models), (def) => name === def.model);
-	}
-
-	return mapping ? clone(mapping) : mapping;
-}
-
-/**
- * Intitialize instance state
- *
- * @return {void}
- */
-function initState () {
-	this[_state] = {
-		flag:     0,
-		modified: []
-	};
-}
+import StateManager from './state_manager';
+import MetadataManager from './metadata_manager';
+import RelationManager from './relation_manager';
 
 /**
  * Base Model class
  */
-class Model {
+class Model extends ModelInterface {
 	/**
-	 * The class related schema
-	 *
-	 * @type {Schema}
-	 */
-	static get schema () {
-		return this.metadata.schema();
-	}
-
-	/**
-	 * The class related namespace
-	 *
-	 * @type {string}
-	 */
-	static get namespace () {
-		return this.metadata.namespace;
-	}
-
-	/**
-	 * Get class metadata (schema, constructor, namespace)
-	 *
-	 * @type {object}
-	 */
-	static get metadata () {
-		const result = mapping(this);
-
-		if (!result)
-			this.register();
-
-		return mapping(this);
-	}
-
-	/**
-	 * List possible states
-	 *
-	 * @type {object}
-	 */
-	static get STATE () {
-		return clone(STATE);
-	}
-
-	/**
-	 * List all registered Models
-	 *
-	 * @type {object}
-	 */
-	static get List () {
-		return clone(_models);
-	}
-
-	/**
-	 * @param  {object} [data={}] The model initial data
-	 */
-	constructor (data = {}) {
-		initState.call(this);
-
-		this[_state].flag |= STATE.NEW;
-
-		assign(this, data);
-
-		return proxify.call(this);
-	}
-
-	/**
-	 * Verify instance state
-	 *
-	 * @param {Model} instance Instance to check
-	 * @param {number} mask State bitmask
-	 *
-	 * @return {boolean} Whether or not the instance match the mask
-	 */
-	static is (instance, mask) {
-		const curFlag = instance[_state].flag;
-
-		return ((curFlag &amp; mask) === mask);
-	}
-
-	/**
-	 * Get modified fields
-	 *
-	 * @param {Model} instance The instanceto check
-	 *
-	 * @return {array&lt;string>|false} Modified fields or false if not modified
-	 */
-	static modified (instance) {
-		return instance[_state].modified.length ? clone(instance[_state].modified) : false;
-	}
-
-	/**
-	 * Load existing data
-	 *
-	 * @param {object} [data={}] Data to load
-	 * @param {Model} [instance] Instance to refresh
-	 *
-	 * @return {Model} instance with data
+	 * @inheritDoc
 	 */
 	static load (data = {}, instance) {
-		if (!instance) {
+		if (!(instance instanceof this)) {
 			instance = new this(data);
 		} else {
 			assign(instance, data);
 		}
 
-		initState.call(instance);
-
-		return instance;
-	}
-
-	/**
-	 * Register a Model with is related Schema
-	 *
-	 * @param {Schema} [schema=new Schema()] The schema to register for validation
-	 * @param {string} [namespace] The namespace of the model (to prevent duplicate name from libs)
-	 *
-	 * @return {this} The current model
-	 */
-	static register (schema, namespace) {
-		const name = compact([namespace, this.name]).join('/');
-
-		if (_models[name])
-			throw new Error("Cannot redeclare model '" + name + "'.");
-
-		let builtSchema;
-
-		_models[name] = {
-			name:      name,
-			model:     this,
-			schema:    () => {
-				if (!builtSchema) {
-					if (isFunction(schema)) { // Lazy load
-						builtSchema = schema();
-					} else if (schema instanceof Schema) {
-						builtSchema = schema;
-					} else if (isObject(schema)) {
-						builtSchema = new Schema(schema);
-					} else {
-						builtSchema = new Schema();
-					}
-
-					if ((this.prototype.constructor !== Model) &amp;&amp; !builtSchema.parent)
-						builtSchema.parent = this.prototype.constructor.schema;
-				}
-
-				return builtSchema;
-			},
-			namespace: namespace
-		};
-
-		return this;
+		return super.load(data, instance);
 	}
 
 	/**
@@ -262,13 +59,18 @@ class Model {
 	 * @return {Model|undefined} The model class if exists
 	 */
 	static get (name) {
-		const metadata = mapping(name) || {};
+		const metadata = MetadataManager.getMetadata(name);
 
-		return metadata.model;
+		return metadata ? metadata.model : metadata;
 	}
 }
 
 export default Model;
+export {
+	StateManager,
+	MetadataManager,
+	RelationManager
+};
 </code></pre>
         </article>
     </section>
@@ -279,13 +81,13 @@ export default Model;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Adapter.html">Adapter</a></li><li><a href="AlternativesSchemaType.html">AlternativesSchemaType</a></li><li><a href="ArraySchemaType.html">ArraySchemaType</a></li><li><a href="BooleanSchemaType.html">BooleanSchemaType</a></li><li><a href="DateSchemaType.html">DateSchemaType</a></li><li><a href="JoiAdapter.html">JoiAdapter</a></li><li><a href="Model.html">Model</a></li><li><a href="NumberSchemaType.html">NumberSchemaType</a></li><li><a href="ObjectSchemaType.html">ObjectSchemaType</a></li><li><a href="Schema.html">Schema</a></li><li><a href="SchemaType.html">SchemaType</a></li><li><a href="SchemaTypeManager.html">SchemaTypeManager</a></li><li><a href="StringSchemaType.html">StringSchemaType</a></li></ul><h3>Global</h3><ul><li><a href="global.html#initState">initState</a></li><li><a href="global.html#mapping">mapping</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Adapter.html">Adapter</a></li><li><a href="AlternativesSchemaType.html">AlternativesSchemaType</a></li><li><a href="ArraySchemaType.html">ArraySchemaType</a></li><li><a href="BooleanSchemaType.html">BooleanSchemaType</a></li><li><a href="DateSchemaType.html">DateSchemaType</a></li><li><a href="JoiAdapter.html">JoiAdapter</a></li><li><a href="MetadataManager.html">MetadataManager</a></li><li><a href="Model.html">Model</a></li><li><a href="ModelInterface.html">ModelInterface</a></li><li><a href="NumberSchemaType.html">NumberSchemaType</a></li><li><a href="ObjectSchemaType.html">ObjectSchemaType</a></li><li><a href="RelationManager.html">RelationManager</a></li><li><a href="Schema.html">Schema</a></li><li><a href="SchemaType.html">SchemaType</a></li><li><a href="SchemaTypeManager.html">SchemaTypeManager</a></li><li><a href="StateManager.html">StateManager</a></li><li><a href="StringSchemaType.html">StringSchemaType</a></li></ul><h3>Global</h3><ul><li><a href="global.html#resolveState">resolveState</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue Mar 21 2017 20:11:38 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sun Apr 02 2017 10:46:19 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

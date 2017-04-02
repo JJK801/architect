@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Schema</title>
+    <title>JSDoc: Class: MetadataManager</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: Schema</h1>
+    <h1 class="page-title">Class: MetadataManager</h1>
 
     
 
@@ -28,9 +28,9 @@
 
 <header>
     
-        <h2>Schema</h2>
+        <h2>MetadataManager</h2>
         
-            <div class="class-description">Schema class for object validation</div>
+            <div class="class-description">Metadata manager class for Models</div>
         
     
 </header>
@@ -44,7 +44,7 @@
     <h2>Constructor</h2>
     
 
-    <h4 class="name" id="Schema"><span class="type-signature"></span>new Schema<span class="signature">(map<span class="signature-attributes">opt</span>, descriptor<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="MetadataManager"><span class="type-signature"></span>new MetadataManager<span class="signature">(model, schema<span class="signature-attributes">opt</span>, namespace<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 
@@ -75,8 +75,6 @@
         
 
         
-        <th>Default</th>
-        
 
         <th class="last">Description</th>
     </tr>
@@ -87,13 +85,13 @@
 
         <tr>
             
-                <td class="name"><code>map</code></td>
+                <td class="name"><code>model</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">object</span>
+<span class="param-type"><a href="Model.html">Model</a></span>
 
 
             
@@ -102,8 +100,6 @@
             
                 <td class="attributes">
                 
-                    &lt;optional><br>
-                
 
                 
 
@@ -112,27 +108,21 @@
             
 
             
-                <td class="default">
-                
-                    {}
-                
-                </td>
-            
 
-            <td class="description last">The object keys handled by this schema</td>
+            <td class="description last">The handled model</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>descriptor</code></td>
+                <td class="name"><code>schema</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">object</span>
+<span class="param-type"><a href="Schema.html">Schema</a></span>
 
 
             
@@ -151,14 +141,41 @@
             
 
             
-                <td class="default">
+
+            <td class="description last">The validation schema</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>namespace</code></td>
+            
+
+            <td class="type">
+            
                 
-                    {}
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
                 
                 </td>
             
 
-            <td class="description last">The schema descriptor (in complements of map)</td>
+            
+
+            <td class="description last">The model's namespace</td>
         </tr>
 
     
@@ -199,7 +216,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="schema_index.js.html">schema/index.js</a>, <a href="schema_index.js.html#line17">line 17</a>
+        <a href="model_metadata_manager.js.html">model/metadata_manager.js</a>, <a href="model_metadata_manager.js.html#line16">line 16</a>
     </li></ul></dd>
     
 
@@ -229,17 +246,6 @@
     </div>
 
     
-        <h3 class="subsection-title">Extends</h3>
-
-        
-
-
-    <ul>
-        <li><a href="ObjectSchemaType.html">ObjectSchemaType</a></li>
-    </ul>
-
-
-    
 
     
 
@@ -254,13 +260,13 @@
 
         
             
-<h4 class="name" id=".emitter"><span class="type-signature">(static) </span>emitter<span class="type-signature"> :EventEmitter</span></h4>
+<h4 class="name" id="model"><span class="type-signature"></span>model<span class="type-signature"> :<a href="Model.html">Model</a></span></h4>
 
 
 
 
 <div class="description">
-    The static event emitter
+    Handled model
 </div>
 
 
@@ -269,7 +275,7 @@
     <ul>
         <li>
             
-<span class="param-type">EventEmitter</span>
+<span class="param-type"><a href="Model.html">Model</a></span>
 
 
         </li>
@@ -308,7 +314,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="schema_index.js.html">schema/index.js</a>, <a href="schema_index.js.html#line134">line 134</a>
+        <a href="model_metadata_manager.js.html">model/metadata_manager.js</a>, <a href="model_metadata_manager.js.html#line61">line 61</a>
     </li></ul></dd>
     
 
@@ -326,10 +332,14 @@
 
         
             
-<h4 class="name" id=".TypeManager"><span class="type-signature">(static) </span>TypeManager<span class="type-signature"> :<a href="SchemaTypeManager.html">SchemaTypeManager</a></span></h4>
+<h4 class="name" id="name"><span class="type-signature"></span>name<span class="type-signature"> :string</span></h4>
 
 
 
+
+<div class="description">
+    Full name of the model (including namespace)
+</div>
 
 
 
@@ -337,7 +347,7 @@
     <ul>
         <li>
             
-<span class="param-type"><a href="SchemaTypeManager.html">SchemaTypeManager</a></span>
+<span class="param-type">string</span>
 
 
         </li>
@@ -376,7 +386,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="schema_index.js.html">schema/index.js</a>, <a href="schema_index.js.html#line34">line 34</a>
+        <a href="model_metadata_manager.js.html">model/metadata_manager.js</a>, <a href="model_metadata_manager.js.html#line52">line 52</a>
     </li></ul></dd>
     
 
@@ -394,13 +404,88 @@
 
         
             
-<h4 class="name" id="parent"><span class="type-signature"></span>parent<span class="type-signature"> :<a href="Schema.html">Schema</a>|undefined</span></h4>
+<h4 class="name" id="namespace"><span class="type-signature"></span>namespace<span class="type-signature"> :string|undefined</span></h4>
 
 
 
 
 <div class="description">
-    Parent schema
+    Namespace of the model
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+|
+
+<span class="param-type">undefined</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="model_metadata_manager.js.html">model/metadata_manager.js</a>, <a href="model_metadata_manager.js.html#line22">line 22</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="schema"><span class="type-signature"></span>schema<span class="type-signature"> :<a href="Schema.html">Schema</a>|undefined</span></h4>
+
+
+
+
+<div class="description">
+    Validation schema of the model
 </div>
 
 
@@ -451,131 +536,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="schema_index.js.html">schema/index.js</a>, <a href="schema_index.js.html#line46">line 46</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="parent"><span class="type-signature"></span>parent<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    Parent schema
-</div>
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="schema_index.js.html">schema/index.js</a>, <a href="schema_index.js.html#line58">line 58</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="paths"><span class="type-signature"></span>paths<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    Paths list of the schema
-</div>
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="schema_index.js.html">schema/index.js</a>, <a href="schema_index.js.html#line67">line 67</a>
+        <a href="model_metadata_manager.js.html">model/metadata_manager.js</a>, <a href="model_metadata_manager.js.html#line31">line 31</a>
     </li></ul></dd>
     
 
@@ -602,14 +563,14 @@
 
     
 
-    <h4 class="name" id="buildValidator"><span class="type-signature"></span>buildValidator<span class="signature">(descriptor<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {mixed}</span></h4>
+    <h4 class="name" id=".getMetadata"><span class="type-signature">(static) </span>getMetadata<span class="signature">(model)</span><span class="type-signature"> &rarr; {<a href="MetadataManager.html">MetadataManager</a>|undefined}</span></h4>
 
     
 
 
 
 <div class="description">
-    Build the schema validator
+    Retreive the metadata of a model
 </div>
 
 
@@ -633,11 +594,7 @@
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
-        
-        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -649,39 +606,26 @@
 
         <tr>
             
-                <td class="name"><code>descriptor</code></td>
+                <td class="name"><code>model</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">object</span>
+<span class="param-type"><a href="Model.html">Model</a></span>
+|
+
+<span class="param-type">Proxy</span>
 
 
             
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
 
             
-                <td class="default">
-                
-                    {}
-                
-                </td>
-            
 
-            <td class="description last">Descriptor to build</td>
+            <td class="description last">The managed model or its proxy</td>
         </tr>
 
     
@@ -722,7 +666,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="schema_index.js.html">schema/index.js</a>, <a href="schema_index.js.html#line119">line 119</a>
+        <a href="model_metadata_manager.js.html">model/metadata_manager.js</a>, <a href="model_metadata_manager.js.html#line101">line 101</a>
     </li></ul></dd>
     
 
@@ -749,7 +693,7 @@
 
         
 <div class="param-desc">
-    validator
+    The metadata manager if exists
 </div>
 
 
@@ -760,7 +704,10 @@
     </dt>
     <dd>
         
-<span class="param-type">mixed</span>
+<span class="param-type"><a href="MetadataManager.html">MetadataManager</a></span>
+|
+
+<span class="param-type">undefined</span>
 
 
     </dd>
@@ -775,14 +722,14 @@
 
     
 
-    <h4 class="name" id="proxify"><span class="type-signature"></span>proxify<span class="signature">(obj<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    <h4 class="name" id=".register"><span class="type-signature">(static) </span>register<span class="signature">(model, schema<span class="signature-attributes">opt</span>, namespace<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="MetadataManager.html">MetadataManager</a>}</span></h4>
 
     
 
 
 
 <div class="description">
-    Profixy an object using <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy">Proxy class</a>, allow continuous validation
+    Register a model
 </div>
 
 
@@ -810,8 +757,6 @@
         
 
         
-        <th>Default</th>
-        
 
         <th class="last">Description</th>
     </tr>
@@ -822,13 +767,44 @@
 
         <tr>
             
-                <td class="name"><code>obj</code></td>
+                <td class="name"><code>model</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">object</span>
+<span class="param-type"><a href="Model.html">Model</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The handled model</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>schema</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Schema.html">Schema</a></span>
 
 
             
@@ -847,14 +823,41 @@
             
 
             
-                <td class="default">
+
+            <td class="description last">The validation schema</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>namespace</code></td>
+            
+
+            <td class="type">
+            
                 
-                    {}
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
                 
                 </td>
             
 
-            <td class="description last">The object to proxify</td>
+            
+
+            <td class="description last">The model's namespace</td>
         </tr>
 
     
@@ -895,7 +898,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="schema_index.js.html">schema/index.js</a>, <a href="schema_index.js.html#line78">line 78</a>
+        <a href="model_metadata_manager.js.html">model/metadata_manager.js</a>, <a href="model_metadata_manager.js.html#line88">line 88</a>
     </li></ul></dd>
     
 
@@ -922,7 +925,7 @@
 
         
 <div class="param-desc">
-    The proxified object
+    The model's metadata manager
 </div>
 
 
@@ -933,7 +936,7 @@
     </dt>
     <dd>
         
-<span class="param-type">object</span>
+<span class="param-type"><a href="MetadataManager.html">MetadataManager</a></span>
 
 
     </dd>

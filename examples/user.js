@@ -1,6 +1,6 @@
 /* eslint-disable no-console, require-jsdoc, valid-jsdoc */
 
-import { Model } from '../lib';
+import { Model, StateManager, MetadataManager } from '../lib';
 import Log from 'log';
 
 const log = new Log('notice');
@@ -23,7 +23,7 @@ export class User extends Model {
 	}
 }
 
-User.register({
+MetadataManager.register(User, {
 	id:        "number",
 	username:  "string",
 	firstname: "string",
@@ -45,9 +45,9 @@ export const userNew = new User(userDefinition);
 log.notice("New user username is:", userNew.username);
 log.notice("New user fullname is:", userNew.fullname);
 log.notice("New user age is:", userNew.age);
-log.notice("Is new user new ?", User.is(userNew, User.STATE.NEW));
-log.notice("Is new user modified ?", User.is(userNew, User.STATE.MODIFIED));
-log.notice("Is new user deleted ?", User.is(userNew, User.STATE.DELETED));
+log.notice("Is new user new ?", StateManager.getState(userNew).is("NEW"));
+log.notice("Is new user modified ?", StateManager.getState(userNew).is("MODIFIED"));
+log.notice("Is new user deleted ?", StateManager.getState(userNew).is("DELETED"));
 
 /* Load an existing user */
 
@@ -56,6 +56,6 @@ export const userLoaded = User.load(userDefinition);
 log.notice("Loaded user username is:", userLoaded.username);
 log.notice("Loaded user fullname is:", userLoaded.fullname);
 log.notice("Loaded user age is:", userLoaded.age);
-log.notice("Is loaded user new ?", User.is(userLoaded, User.STATE.NEW));
-log.notice("Is loaded user modified ?", User.is(userLoaded, User.STATE.MODIFIED));
-log.notice("Is loaded user deleted ?", User.is(userLoaded, User.STATE.DELETED));
+log.notice("Is loaded user new ?", StateManager.getState(userLoaded).is("NEW"));
+log.notice("Is loaded user modified ?", StateManager.getState(userLoaded).is("MODIFIED"));
+log.notice("Is loaded user deleted ?", StateManager.getState(userLoaded).is("DELETED"));

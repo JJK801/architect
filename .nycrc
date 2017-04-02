@@ -1,6 +1,7 @@
 {
   "reporter": [
-    "lcovonly"
+    "lcovonly",
+    "text-summary"
   ],
   "exclude": [
     "lib/schema/adapter/index.js",

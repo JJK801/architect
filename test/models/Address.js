@@ -6,24 +6,25 @@ import { map } from 'lodash';
 const chance = new Chance();
 
 import Schema from '../../lib/schema';
-import Model from '../../lib/model';
+import Model, { MetadataManager } from '../../lib/model';
 
 class Address extends Model
 {
 
 }
 
-Address.register(() => new Schema({
-	id:        {
-		_type:    "number",
-		required: true
-	},
-	number:  "string",
-	street:  "string",
-	city:    "string",
-	zipcode: "string",
-	country: "string"
-}));
+MetadataManager
+	.register(Address, () => new Schema({
+		id:        {
+			_type:    "number",
+			required: true
+		},
+		number:  "string",
+		street:  "string",
+		city:    "string",
+		zipcode: "string",
+		country: "string"
+	}));
 
 
 export default Address;

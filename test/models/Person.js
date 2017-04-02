@@ -6,7 +6,7 @@ import { map } from 'lodash';
 const chance = new Chance();
 
 import Schema from '../../lib/schema';
-import Model from '../../lib/model';
+import Model, { MetadataManager, RelationManager } from '../../lib/model';
 
 class Person extends Model
 {
@@ -15,32 +15,34 @@ class Person extends Model
 	}
 }
 
-Person
-.register(() => new Schema({
-	id: {
-		_type:    "number",
-		required: true
-	},
-	firstname: "string",
-	lastname:  "string",
-	birthday:  "date",
-	addresses: {
-		_type:   "array",
-		items:   [Model.get("Address")],
-		default: []
-		//unique: 'id'
-	},
-	profiles: {
-		_type:   "array",
-		items:   [Model.get("Profile")],
-		default: []
-		//unique: 'id'
-	},
-	user: Model.get("User")
-}))
-.setRelation('addresses')
-.setRelation('profiles', 'person')
-.setRelation('user', 'person');
+RelationManager.getRelations(Person)
+	.setRelation('addresses')
+	.setRelation('profiles', 'person')
+	.setRelation('user', 'person');
+
+MetadataManager
+	.register(Person, () => new Schema({
+		id: {
+			_type:    "number",
+			required: true
+		},
+		firstname: "string",
+		lastname:  "string",
+		birthday:  "date",
+		addresses: {
+			_type:   "array",
+			items:   [Model.get("Address")],
+			default: []
+			//unique: 'id'
+		},
+		profiles: {
+			_type:   "array",
+			items:   [Model.get("Profile")],
+			default: []
+			//unique: 'id'
+		},
+		user: Model.get("User")
+	}));
 
 export default Person;
 

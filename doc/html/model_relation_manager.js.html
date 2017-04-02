@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: schema/adapter/Joi.js</title>
+    <title>JSDoc: Source: model/relation_manager.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: schema/adapter/Joi.js</h1>
+    <h1 class="page-title">Source: model/relation_manager.js</h1>
 
     
 
@@ -26,98 +26,86 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import Adapter from './index';
-import Joi     from 'joi';
+            <pre class="prettyprint source linenums"><code>import ModelInterface from './interface';
 
-import SchemaTypeManager from '../type/manager';
+import { get, isArray, isFunction, isObject } from 'lodash';
 
-import { map, mapValues, toPairs, isArray, each, invoke } from 'lodash';
+const _relations = Symbol("relations");
 
 /**
- * Validation adapter for [Joi]{@link https://github.com/hapijs/joi}
- *
- * @extends {Adapter}
+ * Relation manager class for models
  */
-class JoiAdapter extends Adapter
-{
+class RelationManager {
 	/**
-	 * @inheritdoc
+	 *
 	 */
-	static getValidator (type = null) {
-		const validator = invoke(Joi, type);
-
-		return validator;
+	constructor () {
+		this[_relations] = {};
 	}
 
 	/**
-	 * @inheritdoc
+	 * Set a relation between entities
+	 *
+	 * @param {string} 			localKey    Own relation key
+	 * @param {string|function} [remoteKey] Remote relation key
+	 *
+	 * @return {Model} The current model
 	 */
-	static build (descriptor = {}, validator) {
-		const methodCalls = toPairs(descriptor);
+	setRelation (localKey, remoteKey) {
+		let remote = remoteKey;
 
-		each(methodCalls, (call) => {
-			const args = isArray(call[1]) &amp;&amp; (call[0] !== "default") ? call[1] : [call[1]];
-
-			validator = validator[call[0]].apply(validator, args);
-		});
-
-		return validator;
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	static validate (value, validator) {
-		return validator.validate(value);
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	static set (value, validator) {
-		return Joi.attempt(value, validator);
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	static sanitize (type, descriptor = {}) {
-		switch (type) {
-			case 'alternatives':
-				if (descriptor.try)
-					descriptor.try = map(descriptor.try, (type) => SchemaTypeManager.instanciate(type).validator);
-				break;
-			case 'array':
-				if (descriptor.items)
-					descriptor.items = map(descriptor.items, (type) => SchemaTypeManager.instanciate(type).validator);
-				break;
-			case 'object':
-				if (descriptor.keys)
-					descriptor.keys = mapValues(descriptor.keys, (type) => SchemaTypeManager.instanciate(type).validator);
-
-				if (descriptor._instanceOf) { // @TODO: Manage it a better way
-					descriptor.type = descriptor._instanceOf;
-
-					delete descriptor._instanceOf;
-				}
-				break;
+		if (!isFunction(remote)) {
+			remote = () => remoteKey;
 		}
 
-		return super.sanitize(type, descriptor);
+		this[_relations][localKey] = remote;
+
+		return this;
 	}
 
 	/**
-	 * @inheritdoc
+	 * Retreive the relations of a model
+	 *
+	 * @param {Model|Proxy} model The managed model or its proxy
+	 *
+	 * @return {RelationManager|undefined} The metadata manager if exists
 	 */
-	static extend (parent, child) {
-		if (parent)
-			return parent.concat(child);
+	static getRelations (model) {
+		let relations;
 
-		return child;
+		if (isFunction(model) || isObject(model)) {
+			if (model instanceof ModelInterface) {
+				model = model.constructor;
+			}
+
+			if (model.prototype instanceof ModelInterface) {
+				if (!model[_relations] || (model[_relations] ===  Object.getPrototypeOf(model)[_relations])) {
+					model[_relations] = new RelationManager();
+				}
+
+				relations = model[_relations];
+			}
+		}
+
+		return relations;
 	}
 }
 
-export default JoiAdapter;
+ModelInterface.emitter.on('change', (model, key) => {
+	const relations = RelationManager.getRelations(model)[_relations];
+	const remote = get(model, key);
+	const relation = relations[key[0]];
+	const remoteKey = relation ? relation(remote) : undefined;
+
+	if (remote &amp;&amp; remoteKey) {
+		if (isArray(remote[remoteKey]))
+			remote[remoteKey].push(model);
+
+		remote[remoteKey] = model;
+	}
+});
+
+export default RelationManager;
 </code></pre>
         </article>
     </section>
