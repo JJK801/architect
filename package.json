@@ -13,7 +13,7 @@
     "jsdoc": "jsdoc -r -d doc/html lib",
     "lint": "eslint lib test",
     "lint:fix": "eslint --fix lib test",
-    "precommit": "npm run lint:fix && npm test && npm run jsdoc",
+    "precommit": "npm run lint:fix && npm test",
     "postmerge": "npm intall"
   },
   "author": "",
